@@ -4,6 +4,12 @@ TKinter GUI to select element from Periodic table of elementsDans Element Proper
 Inspired by:
 https://codereview.stackexchange.com/questions/272438/python-tkinter-periodic-table-of-chemical-elements
 Thanks to: Thingamabobs and Reinderien
+
+Last updated: 10 May 2023
+
+By Dan Porter PhD
+Diamond Light Source Ltd
+2023
 """
 
 import tkinter as tk
@@ -117,15 +123,16 @@ def load_elements():
 
 class ElementButton:
     BORDER = 3
+    FONT_NAME = 'Palatino'
+    FONT_SIZE = 10
 
     def __init__(self, parent: tk.Widget, placed_element: Element, info_widget: tk.Text) -> None:
         self.element = placed_element
-        self.background = self.element.background
         self.info_widget = info_widget
         self.frame = frame = tk.Frame(
             parent, relief=tk.RAISED,
             name=f'frame_{self.element.symbol}',
-            background=self.background,
+            background=self.element.background,
             border=self.BORDER,
         )
         self.frame.grid_columnconfigure(1, weight=2)
@@ -143,23 +150,27 @@ class ElementButton:
 
         tk.Label(
             self.frame, name=prefix + 'number',
-            text=self.element.atomic_number, background=self.background,
+            text=self.element.atomic_number, background=self.element.background,
+            font=[self.FONT_NAME, self.FONT_SIZE],
         ).grid(row=0, column=0, sticky=tk.NW)
 
         tk.Label(
             self.frame, name=prefix + 'mass',
-            text=self.element.weight, background=self.background,
+            text=self.element.weight, background=self.element.background,
+            font=[self.FONT_NAME, self.FONT_SIZE],
         ).grid(row=0, column=2, sticky=tk.NE)
 
         tk.Label(
             self.frame, name=prefix + 'symbol',
-            text=self.element.symbol, font='bold', background=self.background,
+            text=self.element.symbol, background=self.element.background,
+            font=[self.FONT_NAME, self.FONT_SIZE, 'bold'],
             foreground=self.element.foreground,
         ).grid(row=1, column=0, sticky=tk.EW, columnspan=3)
 
         tk.Label(
             self.frame, name=prefix + 'name',
-            text=self.element.name, background=self.background,
+            text=self.element.name, background=self.element.background,
+            font=[self.FONT_NAME, self.FONT_SIZE],
         ).grid(row=2, column=0, sticky=tk.EW, columnspan=3)
 
     def press(self, event: tk.Event) -> None:
@@ -206,7 +217,7 @@ class PeriodTableGui:
         scany.pack(side=tk.RIGHT, fill=tk.Y)
 
         # Editable string box
-        self.element_text = tk.Text(info_frame, font=['Courier', 12], width=60, height=10,
+        self.element_text = tk.Text(info_frame, font=['Courier', 12], width=60, height=8,
                                     wrap=tk.NONE, background='white')
         self.element_text.pack(side=tk.TOP, fill=tk.BOTH, expand=tk.YES)
         self.element_text.insert(tk.END, '')
